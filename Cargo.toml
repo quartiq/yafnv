@@ -1,9 +1,12 @@
 [package]
-name = "fnv"
+name = "yafnv"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-description = "Fowler-Noll-Vo (FNV-1, FNV-1a) hashes on `u32`, `u64`, `u128`, all `no_std` and`no_alloc`"
+description = "Yet Another Fowler-Noll-Vo (FNV-1, FNV-1a) hash implementation on `u32`, `u64`, `u128`, all `no_std` and`no_alloc`"
+documentation = "https://docs.rs/yafnv/latest/yafnv/"
+homepage = "https://github.com/quartiq/yafnv"
+repository = "https://github.com/quartiq/yafnv"
 
 [dependencies]
 num-traits = { version = "0.2.18", default-features = false }

@@ -45,7 +45,7 @@ where
     /// Compute the Fowler-Noll-Vo hash FNV-1a (xor before multiply)
     ///
     /// ```
-    /// use fnv::Fnv;
+    /// use yafnv::Fnv;
     ///
     /// // Test vectors from
     /// // https://datatracker.ietf.org/doc/draft-eastlake-fnv/21/
@@ -56,7 +56,7 @@ where
     /// ] {
     ///     let data = data.as_bytes().iter().copied();
     ///     assert_eq!(u32::OFFSET_BASIS.fnv1a(data.clone()), h32);
-    ///     assert_eq!(u64::OFFSET_BASIS.fnv1a(data.clone()), h64);
+    ///     assert_eq!(u64::OFFSET_BASIS.fnv1a(data), h64);
     /// }
     /// ```
     #[inline]
@@ -84,7 +84,7 @@ impl Fnv for u128 {
 ///
 /// ```
 /// use core::hash::Hasher;
-/// use fnv::Fnv1aHasher;
+/// use yafnv::Fnv1aHasher;
 ///
 /// // Test vector from https://datatracker.ietf.org/doc/draft-eastlake-fnv/21/
 /// let mut h = Fnv1aHasher::default();
