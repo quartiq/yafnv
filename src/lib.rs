@@ -10,9 +10,9 @@ use num_traits::{AsPrimitive, WrappingMul};
 ///
 /// Both FNV-1 and FNV-1a are provided.
 ///
-/// FNV is not a cryptographic hash.
-///
-/// FNV is not resistant to "hash flooding" denial-of-service attacks.
+/// Note that:
+/// * FNV is not a cryptographic hash.
+/// * FNV is not resistant to "hash flooding" denial-of-service attacks.
 pub trait Fnv: 'static + Copy + WrappingMul + BitXor<Output = Self>
 where
     u8: AsPrimitive<Self>,
@@ -20,16 +20,16 @@ where
     /// The FNV prime
     const PRIME: Self;
     /// The FNV offset basis
-    const OFFSET: Self;
+    const OFFSET_BASIS: Self;
 
-    /// Compute the Fowler-Noll-Vo hash FNV-1
+    /// Compute the Fowler-Noll-Vo hash FNV-1 (multiply before xor)
     fn fnv1(data: impl Iterator<Item = u8>) -> Self {
-        data.fold(<Self as Fnv>::OFFSET, |hash, byte| {
+        data.fold(<Self as Fnv>::OFFSET_BASIS, |hash, byte| {
             hash.wrapping_mul(&<Self as Fnv>::PRIME) ^ byte.as_()
         })
     }
 
-    /// Compute the Fowler-Noll-Vo hash FNV-1a
+    /// Compute the Fowler-Noll-Vo hash FNV-1a (xor before multiply)
     ///
     /// ```
     /// use fnv::Fnv;
@@ -46,7 +46,7 @@ where
     /// }
     /// ```
     fn fnv1a(data: impl Iterator<Item = u8>) -> Self {
-        data.fold(<Self as Fnv>::OFFSET, |hash, byte| {
+        data.fold(<Self as Fnv>::OFFSET_BASIS, |hash, byte| {
             (hash ^ byte.as_()).wrapping_mul(&<Self as Fnv>::PRIME)
         })
     }
@@ -54,13 +54,13 @@ where
 
 impl Fnv for u32 {
     const PRIME: u32 = 0x01000193;
-    const OFFSET: u32 = 0x811c9dc5;
+    const OFFSET_BASIS: u32 = 0x811c9dc5;
 }
 impl Fnv for u64 {
     const PRIME: u64 = 0x00000100000001B3;
-    const OFFSET: u64 = 0xcbf29ce484222325;
+    const OFFSET_BASIS: u64 = 0xcbf29ce484222325;
 }
 impl Fnv for u128 {
     const PRIME: u128 = 0x0000000001000000000000000000013B;
-    const OFFSET: u128 = 0x6c62272e07bb014262b821756295c58d;
+    const OFFSET_BASIS: u128 = 0x6c62272e07bb014262b821756295c58d;
 }
