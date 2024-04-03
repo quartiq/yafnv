@@ -3,7 +3,10 @@ name = "fnv"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-description = "A `no_std` trait for Fowler-Noll-Vo hashes on `u32`, `u64`, `u128`"
+description = "Fowler-Noll-Vo (FNV-1, FNV-1a) hashes on `u32`, `u64`, `u128`, all `no_std` and`no_alloc`"
 
 [dependencies]
 num-traits = { version = "0.2.18", default-features = false }
+
+[features]
+std = []
