@@ -41,7 +41,7 @@ where
         I: IntoIterator<Item = u8>,
     {
         data.into_iter().fold(self, |hash, byte| {
-            hash.wrapping_mul(&<Self as Fnv>::PRIME) ^ byte.as_()
+            hash.wrapping_mul(&Self::PRIME) ^ byte.as_()
         })
     }
 
@@ -68,7 +68,7 @@ where
         I: IntoIterator<Item = u8>,
     {
         data.into_iter().fold(self, |hash, byte| {
-            (hash ^ byte.as_()).wrapping_mul(&<Self as Fnv>::PRIME)
+            (hash ^ byte.as_()).wrapping_mul(&Self::PRIME)
         })
     }
 }
