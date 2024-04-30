@@ -36,8 +36,11 @@ where
 
     /// Compute the Fowler-Noll-Vo hash FNV-1 (multiply before xor)
     #[inline]
-    fn fnv1(self, data: impl Iterator<Item = u8>) -> Self {
-        data.fold(self, |hash, byte| {
+    fn fnv1<I>(self, data: I) -> Self
+    where
+        I: IntoIterator<Item = u8>,
+    {
+        data.into_iter().fold(self, |hash, byte| {
             hash.wrapping_mul(&<Self as Fnv>::PRIME) ^ byte.as_()
         })
     }
@@ -60,8 +63,11 @@ where
     /// }
     /// ```
     #[inline]
-    fn fnv1a(self, data: impl Iterator<Item = u8>) -> Self {
-        data.fold(self, |hash, byte| {
+    fn fnv1a<I>(self, data: I) -> Self
+    where
+        I: IntoIterator<Item = u8>,
+    {
+        data.into_iter().fold(self, |hash, byte| {
             (hash ^ byte.as_()).wrapping_mul(&<Self as Fnv>::PRIME)
         })
     }
@@ -80,7 +86,33 @@ impl Fnv for u128 {
     const OFFSET_BASIS: u128 = 0x6c62272e07bb014262b821756295c58d;
 }
 
-/// Fowler-Noll-Vo FNV-1a hash function
+/// Compute the FNV-1 hash.
+///
+/// See also [`Fnv::fnv1`].
+/// Uses the default [`Fnv::OFFSET_BASIS`].
+pub fn fnv1<T, I>(data: I) -> T
+where
+    T: Fnv,
+    I: IntoIterator<Item = u8>,
+    u8: AsPrimitive<T>,
+{
+    T::OFFSET_BASIS.fnv1(data)
+}
+
+/// Compute the FNV-1a hash.
+///
+/// See also [`Fnv::fnv1a`].
+/// Uses the default [`Fnv::OFFSET_BASIS`].
+pub fn fnv1a<T, I>(data: I) -> T
+where
+    T: Fnv,
+    I: IntoIterator<Item = u8>,
+    u8: AsPrimitive<T>,
+{
+    T::OFFSET_BASIS.fnv1a(data)
+}
+
+/// Fowler-Noll-Vo FNV-1a Hasher
 ///
 /// ```
 /// use core::hash::Hasher;
