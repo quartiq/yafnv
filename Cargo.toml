@@ -1,6 +1,6 @@
 [package]
 name = "yafnv"
-version = "0.1.1"
+version = "1.0.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Yet Another Fowler-Noll-Vo (FNV-1, FNV-1a) hash implementation for `u32/u64/u128` size, all `no_std` and`no_alloc`"
