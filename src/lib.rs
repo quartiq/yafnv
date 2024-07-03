@@ -93,10 +93,10 @@ impl Fnv for u128 {
 pub fn fnv1<T, I>(data: I) -> T
 where
     T: Fnv,
-    I: IntoIterator<Item = u8>,
+    I: AsRef<[u8]>,
     u8: AsPrimitive<T>,
 {
-    T::OFFSET_BASIS.fnv1(data)
+    T::OFFSET_BASIS.fnv1(data.as_ref().iter().copied())
 }
 
 /// Compute the FNV-1a hash.
@@ -106,10 +106,10 @@ where
 pub fn fnv1a<T, I>(data: I) -> T
 where
     T: Fnv,
-    I: IntoIterator<Item = u8>,
+    I: AsRef<[u8]>,
     u8: AsPrimitive<T>,
 {
-    T::OFFSET_BASIS.fnv1a(data)
+    T::OFFSET_BASIS.fnv1a(data.as_ref().iter().copied())
 }
 
 /// Fowler-Noll-Vo FNV-1a Hasher
@@ -163,3 +163,22 @@ pub type Fnv1aHashMap<K, V> = HashMap<K, V, Fnv1aBuildHasher>;
 /// A `HashSet` using a default FNV-1a hasher.
 #[cfg(feature = "std")]
 pub type Fnv1aHashSet<T> = HashSet<T, Fnv1aBuildHasher>;
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test() {
+        // Test vectors from
+        // https://datatracker.ietf.org/doc/draft-eastlake-fnv/21/
+        for (data, h32, h64) in [
+            ("", 0x811c9dc5, 0xcbf29ce484222325),
+            ("a", 0xe40c292c, 0xaf63dc4c8601ec8c),
+            ("foobar", 0xbf9cf968, 0x85944171f73967e8),
+        ] {
+            assert_eq!(fnv1a::<u32, _>(data), h32);
+            assert_eq!(fnv1a::<u64, _>(data), h64);
+        }
+    }
+}
