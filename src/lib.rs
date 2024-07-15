@@ -90,26 +90,24 @@ impl Fnv for u128 {
 ///
 /// See also [`Fnv::fnv1`].
 /// Uses the default [`Fnv::OFFSET_BASIS`].
-pub fn fnv1<T, I>(data: I) -> T
+pub fn fnv1<T>(data: &[u8]) -> T
 where
     T: Fnv,
-    I: AsRef<[u8]>,
     u8: AsPrimitive<T>,
 {
-    T::OFFSET_BASIS.fnv1(data.as_ref().iter().copied())
+    T::OFFSET_BASIS.fnv1(data.iter().copied())
 }
 
 /// Compute the FNV-1a hash.
 ///
 /// See also [`Fnv::fnv1a`].
 /// Uses the default [`Fnv::OFFSET_BASIS`].
-pub fn fnv1a<T, I>(data: I) -> T
+pub fn fnv1a<T>(data: &[u8]) -> T
 where
     T: Fnv,
-    I: AsRef<[u8]>,
     u8: AsPrimitive<T>,
 {
-    T::OFFSET_BASIS.fnv1a(data.as_ref().iter().copied())
+    T::OFFSET_BASIS.fnv1a(data.iter().copied())
 }
 
 /// Fowler-Noll-Vo FNV-1a Hasher
@@ -177,8 +175,8 @@ mod test {
             ("a", 0xe40c292c, 0xaf63dc4c8601ec8c),
             ("foobar", 0xbf9cf968, 0x85944171f73967e8),
         ] {
-            assert_eq!(fnv1a::<u32, _>(data), h32);
-            assert_eq!(fnv1a::<u64, _>(data), h64);
+            assert_eq!(fnv1a::<u32>(data.as_bytes()), h32);
+            assert_eq!(fnv1a::<u64>(data.as_bytes()), h64);
         }
     }
 }
